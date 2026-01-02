@@ -1,0 +1,145 @@
+.root {
+  min-height: 100dvh;
+}
+
+.swipe-deck-wrapper {
+  --card-width: 300px;
+  --card-height: 500px;
+
+  anchor-name: --swipe-deck-anchor;
+
+  position: relative;
+  isolation: isolate;
+  overflow-x: scroll;
+  /* scrollbar-width: none; */
+  white-space: nowrap;
+  scroll-snap-type: x mandatory;
+}
+
+.swipe-deck-card {
+  --hue: calc(18 * var(--index));
+  --color: oklch(100% 100% var(--hue));
+
+  view-timeline: --swipe-timeline inline;
+
+  container-type: size;
+  display: inline-block;
+  width: var(--card-width);
+  height: var(--card-height);
+  scroll-snap-align: center;
+
+  &:first-child {
+    margin-left: calc(50% - var(--card-width) / 2);
+  }
+
+  &:last-child {
+    margin-right: calc(50% - var(--card-width) / 2);
+  }
+
+  & > span {
+    z-index: -1;
+    background-color: var(--color);
+    display: inline-block;
+    position: fixed;
+    position-anchor: --swipe-deck-anchor;
+    top: calc(anchor(top) + 10cqh);
+    bottom: calc(anchor(bottom) + 10cqh);
+    left: calc(anchor(center) - 45cqw);
+    right: calc(anchor(center) - 45cqw);
+    box-shadow:
+      0.3px 0.5px 0.7px hsl(var(--shadow-color) / 0.36),
+      0.8px 1.6px 2px -0.8px hsl(var(--shadow-color) / 0.36),
+      2.1px 4.1px 5.2px -1.7px hsl(var(--shadow-color) / 0.36),
+      5px 10px 12.6px -2.5px hsl(var(--shadow-color) / 0.36);
+
+    animation-timeline: --swipe-timeline;
+    animation-name: swipe;
+    animation-fill-mode: both;
+    animation-timing-function: linear;
+  }
+}
+
+@keyframes swipe {
+  0% {
+    z-index: -10;
+    transform: rotate(12deg) scale(0.6) translateX(175px);
+  }
+
+  50% {
+    z-index: -1;
+    transform: scale(1) translateX(0px);
+  }
+
+  100% {
+    z-index: -10;
+    transform: rotate(-12deg) scale(0.6) translateX(-175px);
+  }
+}
+
+.swipe-deck-wrapper-v2 {
+  --card-size: 500px;
+
+  anchor-name: --swipe-deck-v2-anchor;
+
+  position: relative;
+  isolation: isolate;
+  outline: 1px solid red;
+  overflow-x: scroll;
+  white-space: nowrap;
+  width: var(--card-size);
+  scroll-snap-type: inline mandatory;
+}
+
+.swipe-deck-card-v2 {
+  --hue: calc(18 * var(--index));
+  --color: oklch(100% 100% var(--hue));
+
+  container-type: size;
+  view-timeline: --swipe-v2-timeline inline;
+
+  outline: 1px solid green;
+  height: var(--card-size);
+  width: var(--card-size);
+  display: inline-block;
+  scroll-snap-align: center;
+
+  & > span {
+    z-index: -1;
+    background-color: var(--color);
+    display: inline-block;
+    position: fixed;
+    position-anchor: --swipe-deck-v2-anchor;
+    top: calc(anchor(top) + 30px);
+    right: calc(anchor(right) + 10%);
+    bottom: calc(anchor(bottom) + 30px);
+    left: calc(anchor(left) + 10%);
+    box-shadow:
+      0.3px 0.5px 0.7px hsl(var(--shadow-color) / 0.36),
+      0.8px 1.6px 2px -0.8px hsl(var(--shadow-color) / 0.36),
+      2.1px 4.1px 5.2px -1.7px hsl(var(--shadow-color) / 0.36),
+      5px 10px 12.6px -2.5px hsl(var(--shadow-color) / 0.36);
+
+    animation-timeline: --swipe-v2-timeline;
+    animation-name: swipe-v2;
+    animation-fill-mode: both;
+    animation-timing-function: linear;
+    animation-range: entry -500% exit 600%;
+  }
+}
+
+@keyframes swipe-v2 {
+  0% {
+    z-index: -10;
+    transform: scale(0.3) rotate(12deg) translateX(250px);
+  }
+
+  50% {
+    z-index: -1;
+    transform: scale(1) translateX(0px);
+  }
+
+  100% {
+    z-index: -10;
+    transform: scale(0.3) rotate(-12deg) translateX(-250px);
+  }
+}
