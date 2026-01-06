@@ -3,8 +3,22 @@
   min-height: 100dvh;
 }
 
+.controls {
+  display: flex;
+  gap: 24px;
+  padding: 16px;
+  flex-wrap: wrap;
+
+  & label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 14px;
+  }
+}
+
 .swipe-deck-wrapper {
-  --card-size: 500px;
+  --card-size: min(500px, 90vw);
 
   anchor-name: --swipe-deck-anchor;
 
@@ -31,10 +45,6 @@
   scroll-snap-align: center;
 
   & > span {
-    --max-offset: 240px;
-    --max-rotation: 12deg;
-    --min-scale: 0.3;
-
     border-radius: 24px;
     z-index: -1;
     background-color: var(--color);
@@ -52,28 +62,112 @@
       5px 10px 12.6px -2.5px hsl(var(--shadow-color) / 0.36);
 
     animation-timeline: --swipe-timeline;
-    animation-name: swipe;
     animation-fill-mode: both;
     animation-timing-function: linear;
     animation-range: entry -500% exit 600%;
   }
 }
 
-@keyframes swipe {
+/* Transform order variations */
+[data-order="trs"] .swipe-deck-card > span { animation-name: swipe-trs; }
+[data-order="rts"] .swipe-deck-card > span { animation-name: swipe-rts; }
+[data-order="str"] .swipe-deck-card > span { animation-name: swipe-str; }
+[data-order="srt"] .swipe-deck-card > span { animation-name: swipe-srt; }
+[data-order="rst"] .swipe-deck-card > span { animation-name: swipe-rst; }
+[data-order="tsr"] .swipe-deck-card > span { animation-name: swipe-tsr; }
+
+/* translate → rotate → scale */
+@keyframes swipe-trs {
   0% {
     z-index: -10;
-    transform: scale(var(--min-scale)) rotate(var(--max-rotation))
-      translateX(var(--max-offset));
+    transform: scale(var(--min-scale)) rotate(var(--max-rotation)) translateX(var(--max-offset));
   }
-
   50% {
     z-index: -1;
-    transform: scale(1) translateX(0px);
+    transform: scale(1) rotate(0deg) translateX(0px);
   }
-
   100% {
     z-index: -10;
-    transform: scale(var(--min-scale)) rotate(calc(var(--max-rotation) * -1))
-      translateX(calc(var(--max-offset) * -1));
+    transform: scale(var(--min-scale)) rotate(calc(var(--max-rotation) * -1)) translateX(calc(var(--max-offset) * -1));
+  }
+}
+
+/* rotate → translate → scale */
+@keyframes swipe-rts {
+  0% {
+    z-index: -10;
+    transform: scale(var(--min-scale)) translateX(var(--max-offset)) rotate(var(--max-rotation));
+  }
+  50% {
+    z-index: -1;
+    transform: scale(1) translateX(0px) rotate(0deg);
+  }
+  100% {
+    z-index: -10;
+    transform: scale(var(--min-scale)) translateX(calc(var(--max-offset) * -1)) rotate(calc(var(--max-rotation) * -1));
+  }
+}
+
+/* scale → translate → rotate */
+@keyframes swipe-str {
+  0% {
+    z-index: -10;
+    transform: rotate(var(--max-rotation)) translateX(var(--max-offset)) scale(var(--min-scale));
+  }
+  50% {
+    z-index: -1;
+    transform: rotate(0deg) translateX(0px) scale(1);
+  }
+  100% {
+    z-index: -10;
+    transform: rotate(calc(var(--max-rotation) * -1)) translateX(calc(var(--max-offset) * -1)) scale(var(--min-scale));
+  }
+}
+
+/* scale → rotate → translate */
+@keyframes swipe-srt {
+  0% {
+    z-index: -10;
+    transform: translateX(var(--max-offset)) rotate(var(--max-rotation)) scale(var(--min-scale));
+  }
+  50% {
+    z-index: -1;
+    transform: translateX(0px) rotate(0deg) scale(1);
+  }
+  100% {
+    z-index: -10;
+    transform: translateX(calc(var(--max-offset) * -1)) rotate(calc(var(--max-rotation) * -1)) scale(var(--min-scale));
+  }
+}
+
+/* rotate → scale → translate */
+@keyframes swipe-rst {
+  0% {
+    z-index: -10;
+    transform: translateX(var(--max-offset)) scale(var(--min-scale)) rotate(var(--max-rotation));
+  }
+  50% {
+    z-index: -1;
+    transform: translateX(0px) scale(1) rotate(0deg);
+  }
+  100% {
+    z-index: -10;
+    transform: translateX(calc(var(--max-offset) * -1)) scale(var(--min-scale)) rotate(calc(var(--max-rotation) * -1));
+  }
+}
+
+/* translate → scale → rotate */
+@keyframes swipe-tsr {
+  0% {
+    z-index: -10;
+    transform: rotate(var(--max-rotation)) scale(var(--min-scale)) translateX(var(--max-offset));
+  }
+  50% {
+    z-index: -1;
+    transform: rotate(0deg) scale(1) translateX(0px);
+  }
+  100% {
+    z-index: -10;
+    transform: rotate(calc(var(--max-rotation) * -1)) scale(var(--min-scale)) translateX(calc(var(--max-offset) * -1));
   }
 }
